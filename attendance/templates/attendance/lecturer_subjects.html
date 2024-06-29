@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Giảng Dạy</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .subject {
+            margin-bottom: 20px;
+        }
+
+        .subject h2 {
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+
+        .subject h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background-color: #e9ecef;
+            margin-bottom: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .student-class {
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Thông Tin Giảng Dạy</h1>
+        {% if subject_data %}
+            {% for subject_info in subject_data %}
+                <div class="subject">
+                    <h2>Môn học: {{ subject_info.subject_name }}</h2>
+                    <h3>Lớp học: {{ subject_info.class_name }}</h3>
+                    <h3>Danh Sách Sinh Viên</h3>
+                    <ul>
+                        {% for student in subject_info.enrolled_students %}
+                            <li>{{ student.Name_Student }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Bạn hiện không giảng dạy môn học nào.</p>
+        {% endif %}
+        <div class="text-center mt-3">
+            <a href="{% url 'lecturer_dashboard' %}" class="btn btn-primary">
+                <i class="fas fa-home"></i> Trang Chủ
+            </a>
+        </div>
+    </div>
+    <script>
+        console.log("Thông Tin Giảng Dạy đã được tải.");
+    </script>
+</body>
+</html>

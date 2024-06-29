@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ Giảng Viên</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 20%;
+            height: auto;
+        }
+
+        nav {
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .container-fluid {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer-info {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .footer-info span {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <img src="/static/images/logo-bdu-2024.png" alt="Logo" class="logo">
+        <nav>
+            <a href="{% url 'create_attendance_form' %}">
+                <i class="fa fa-edit"></i> Tạo Phiếu Điểm Danh
+            </a>
+            <a href="{% url 'lecturer_subjects' %}">
+                <i class="fa fa-briefcase"></i> Xem Thông Tin Giảng Dạy
+            </a>
+            <a href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+            </a>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <img src="/static/images/img1.jpg" alt="Body Image" class="img-fluid">
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="footer-info">
+                        <span>🏫 TRƯỜNG ĐẠI HỌC BÌNH DƯƠNG</span>
+                        <span>📍 Địa chỉ: Số 504 Đại lộ Bình Dương, P. Hiệp Thành, Tp. Thủ Dầu Một, T. Bình Dương.</span>
+                        <span>📞 0789 269 219 - 0274 6 511 756 - 0274 3 822 058</span>
+                        <span>📧 info@bdu.edu.vn</span>
+                        <span>🌐 <a href="https://bdu.edu.vn" style="color: white;">https://bdu.edu.vn</a></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-info">
+                        <span>🏫 CƠ SỞ BẾN CÁT</span>
+                        <span>📍 Địa chỉ: Ấp Kiến Điền, Xã An Điền, TX. Bến Cát, T. Bình Dương.</span>
+                        <span>📞 0789 269 219 - 0274 6 511 756</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-info">
+                        <span>🏫 PHÂN HIỆU CÀ MAU</span>
+                        <span>📍 Địa chỉ: Số 3, Lê Thị Riêng, P. 5, Tp. Cà Mau, T. Cà Mau.</span>
+                        <span>📞 0971 936 219 – 0290 6 539 468</span>
+                        <span>📧 tuyensinh.cm@bdu.edu.vn</span>
+                        <span>🌐 <a href="https://camau.bdu.edu.vn" style="color: white;">https://camau.bdu.edu.vn</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

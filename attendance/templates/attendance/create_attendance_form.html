@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Phiếu Điểm Danh</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #map {
+            height: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .success-message {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            border-radius: 4px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-group a {
+            flex: 1;
+            margin-right: 5px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+            #map {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tạo Phiếu Điểm Danh</h2>
+        
+        <!-- Hiển thị thông điệp thành công -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="success-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Ô chọn môn học -->
+            <div class="form-group">
+                <label for="id_Subject">Môn Học:</label>
+                <select id="id_Subject" name="subject" class="form-control" required>
+                    {% for subject in subjects %}
+                        <option value="{{ subject.Subject_ID }}">{{ subject.Subject_Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Ô nhập thứ ngày tháng năm -->
+            <div class="form-group">
+                <label for="id_Date">Thứ Ngày Tháng Năm:</label>
+                <input type="date" id="id_Date" name="date" class="form-control" required>
+            </div>
+            
+            <!-- Ô combox show moment sáng chiều -->
+            <div class="form-group">
+                <label for="id_Moment">Buổi Học:</label>
+                <select id="id_Moment" name="moment" class="form-control" required>
+                    <option value="Buổi Sáng">Buổi Sáng</option>
+                    <option value="Buổi Chiều">Buổi Chiều</option>
+                </select>
+            </div>
+            
+            <!-- Ô combox show status bắt đầu kết thúc -->
+            <div class="form-group">
+                <label for="id_Status">Trạng Thái:</label>
+                <select id="id_Status" name="status" class="form-control" required>
+                    <option value="Bắt Đầu">Bắt Đầu</option>
+                    <option value="Kết Thúc">Kết Thúc</option>
+                </select>
+            </div>
+            
+            <!-- Ô nhập vị trí kinh độ -->
+            <div class="form-group">
+                <label for="id_Longitude">Kinh Độ:</label>
+                <input type="text" id="id_Longitude" name="longitude" class="form-control" required>
+            </div>
+            
+            <!-- Ô nhập vị trí vĩ độ -->
+            <div class="form-group">
+                <label for="id_Latitude">Vĩ Độ:</label>
+                <input type="text" id="id_Latitude" name="latitude" class="form-control" required>
+            </div>
+            
+            <!-- Bản đồ để hiển thị vị trí hiện tại sử dụng Leaflet Map API -->
+            <div id="map"></div>
+            
+            <!-- Ô nhập vị trí giới hạn radius -->
+            <div class="form-group">
+                <label for="id_Radius">Phạm Vi:</label>
+                <input type="number" id="id_Radius" name="radius" class="form-control" required>
+            </div>
+            
+            <!-- Nút Trang Chủ -->
+            <div class="btn-group">
+                <a href="{% url 'lecturer_dashboard' %}" class="btn btn-danger logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Trang Chủ
+                </a>
+                <button type="submit" class="btn btn-primary">Tạo</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Khởi tạo bản đồ Leaflet
+        var map = L.map('map').setView([0, 0], 13); // Đặt vị trí mặc định và mức zoom
+        
+        // Thêm layer bản đồ OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+        
+        // Hàm để đặt marker và cập nhật vị trí Latitude và Longitude
+        function setMarker(lat, lng) {
+            map.setView([lat, lng], 13); // Đặt lại vị trí và mức zoom
+            
+            // Xóa marker hiện tại nếu có
+            if (typeof marker !== 'undefined') {
+                map.removeLayer(marker);
+            }
+            
+            // Đặt marker mới
+            marker = L.marker([lat, lng]).addTo(map);
+            
+            // Cập nhật giá trị vào ô nhập Longitude và Latitude
+            document.getElementById('id_Longitude').value = lng.toFixed(6);
+            document.getElementById('id_Latitude').value = lat.toFixed(6);
+        }
+        
+        // Lấy vị trí hiện tại của người dùng
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            setMarker(lat, lng); // Đặt marker với vị trí hiện tại
+        });
+    </script>
+</body>
+</html>
